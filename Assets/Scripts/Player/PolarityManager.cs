@@ -1,3 +1,5 @@
+using Unity.Android.Gradle;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PolarityManager : MonoBehaviour
@@ -8,6 +10,17 @@ public class PolarityManager : MonoBehaviour
     public float magneticForce = 20f;
     public float magneticRange = 10f;
 
+    [Header("Materials")]
+    public Material positiveMat;
+    public Material negativeMat;
+
+    private Renderer rend;
+
+    void Start()
+    {
+        rend = GetComponent<Renderer>();
+        UpdateMaterial();
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -21,6 +34,7 @@ public class PolarityManager : MonoBehaviour
     void TogglePolarity()
     {
         currentPolarity = (currentPolarity == Polarity.Positive) ? Polarity.Negative : Polarity.Positive;
+        UpdateMaterial();
     }
 
     void ApplyMagneticForce()
@@ -44,4 +58,18 @@ public class PolarityManager : MonoBehaviour
             magnetic.OnMagneticInteraction(force, dir);
         }
     }
-}   
+    private void UpdateMaterial()
+    {
+        if (!rend) return;
+
+        switch (currentPolarity)
+        {
+            case Polarity.Positive:
+                rend.material = positiveMat;
+                break;
+            case Polarity.Negative:
+                rend.material = negativeMat;
+                break;
+        }
+    }
+}

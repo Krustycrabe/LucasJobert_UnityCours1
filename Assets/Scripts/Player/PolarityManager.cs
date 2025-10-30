@@ -1,75 +1,69 @@
-using Unity.Android.Gradle;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Linq;
 
-public class PolarityManager : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public class PolarityManager : MonoBehaviour, IMagnetic
 {
-    public enum Polarity { Positive, Negative }
-    public Polarity currentPolarity = Polarity.Positive;
+    [SerializeField] private Polarity currentPolarity = Polarity.Positive;
+    [SerializeField] private float magneticForce = 10f;
+    [SerializeField] private float fieldRange = 8f;
+    [SerializeField] private Renderer ballRenderer;
+    [SerializeField] private LayerMask affectedLayers = ~0;
 
-    public float magneticForce = 20f;
-    public float magneticRange = 10f;
+    private Rigidbody rb;
 
-    [Header("Materials")]
-    public Material positiveMat;
-    public Material negativeMat;
-
-    private Renderer rend;
-
-    void Start()
+    private void Start()
     {
-        rend = GetComponent<Renderer>();
-        UpdateMaterial();
+        rb = GetComponent<Rigidbody>();
+        UpdateColor();
     }
-    void Update()
+
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             TogglePolarity();
         }
-
-        ApplyMagneticForce();
     }
 
-    void TogglePolarity()
+    private void TogglePolarity()
     {
-        currentPolarity = (currentPolarity == Polarity.Positive) ? Polarity.Negative : Polarity.Positive;
-        UpdateMaterial();
+        currentPolarity = currentPolarity == Polarity.Positive ? Polarity.Negative : Polarity.Positive;
+        UpdateColor();
     }
 
-    void ApplyMagneticForce()
+    private void UpdateColor()
     {
-        Collider[] objects = Physics.OverlapSphere(transform.position, magneticRange);
+        if (ballRenderer)
+            ballRenderer.material.color = currentPolarity == Polarity.Positive ? Color.red : Color.blue;
+    }
 
-        foreach (Collider obj in objects)
+    private void FixedUpdate()
+    {
+        // Le joueur émet lui aussi un champ magnétique (comme l'ancre)
+        Collider[] cols = Physics.OverlapSphere(transform.position, fieldRange, affectedLayers, QueryTriggerInteraction.Ignore);
+
+        foreach (Collider col in cols)
         {
-            IMagnetic magnetic = obj.GetComponent<IMagnetic>();
-            if (magnetic == null) continue;
+            IMagnetic targetMag = col.GetComponentInParent<IMagnetic>();
+            if (targetMag == null || targetMag == (IMagnetic)this) continue;
 
-            Vector3 dir = (magnetic.Rb.position - transform.position).normalized;
-            float distance = Vector3.Distance(transform.position, magnetic.Rb.position);
-            float force = magneticForce / Mathf.Max(distance, 0.5f);
+            Rigidbody targetRb = (targetMag as MonoBehaviour)?.GetComponent<Rigidbody>();
+            if (targetRb == null) continue;
 
-            if (magnetic.Polarity == currentPolarity)
-                magnetic.Rb.AddForce(dir * force); // r�pulsion
-            else
-                magnetic.Rb.AddForce(-dir * force); // attraction
+            Vector3 dir = targetRb.position - transform.position;
+            float dist = dir.magnitude;
+            if (dist < 0.1f) continue;
 
-            magnetic.OnMagneticInteraction(force, dir);
+            float sign = (targetMag.GetPolarity() == currentPolarity) ? -1f : 1f;
+            Vector3 force = dir.normalized * (magneticForce / (dist * dist)) * sign;
+
+            targetRb.AddForce(force, ForceMode.Force);
         }
     }
-    private void UpdateMaterial()
-    {
-        if (!rend) return;
 
-        switch (currentPolarity)
-        {
-            case Polarity.Positive:
-                rend.material = positiveMat;
-                break;
-            case Polarity.Negative:
-                rend.material = negativeMat;
-                break;
-        }
-    }
+    // Interface IMagnetic
+    public Polarity GetPolarity() => currentPolarity;
+    public bool EmitsField() => true;
+    public void ApplyMagneticForce(IMagnetic other) { /* non utilisé ici */ }
 }

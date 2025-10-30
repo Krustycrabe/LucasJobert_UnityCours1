@@ -1,21 +1,16 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class MagneticObject : MonoBehaviour, IMagnetic
 {
-    [SerializeField] private PolarityManager.Polarity polarity;
-    private Rigidbody rb;
+    [SerializeField] private Polarity polarity = Polarity.Positive;
 
-    public PolarityManager.Polarity Polarity => polarity;
-    public Rigidbody Rb => rb;
+    public Polarity GetPolarity() => polarity;
 
-    void Awake()
+    public bool EmitsField() => false;
+
+    public void ApplyMagneticForce(IMagnetic other)
     {
-        rb = GetComponent<Rigidbody>();
-    }
-
-    public void OnMagneticInteraction(float force, Vector3 direction)
-    {
-        // Effet visuel ou particule (optionnel)
+        // Les objets passifs ne génèrent pas de champ
     }
 }

@@ -458,7 +458,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.41, y: 24.13, z: -0.22}
+  m_LocalPosition: {x: 0.41, y: 38.02, z: -0.22}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -755,7 +755,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPolarity: 1
-  magneticForce: 5000
+  magneticForce: 500
   fieldRange: 15
   ballRenderer: {fileID: 428792990}
   affectedLayers:
@@ -773,7 +773,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d25219f5048aa8c44a5f84a0d10124d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
+  _acceleration: 50
+  _maxSpeed: 15
+  _turnResponsiveness: 10
+  _groundFriction: 1.5
 --- !u!114 &428792987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -982,11 +985,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3173803217231733573, guid: 91916abb6880cb44aa11d2625d09c07e, type: 3}
       propertyPath: m_Drag
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3173803217231733573, guid: 91916abb6880cb44aa11d2625d09c07e, type: 3}
       propertyPath: m_Mass
-      value: 500
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3173803217231733573, guid: 91916abb6880cb44aa11d2625d09c07e, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3394884637820581813, guid: 91916abb6880cb44aa11d2625d09c07e, type: 3}
       propertyPath: polarity
@@ -1239,8 +1246,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   polarity: 0
-  fieldStrength: 2000
-  fieldRange: 15
+  fieldStrength: 1000
+  fieldRange: 10
   minDistance: 0.5
   affectedLayers:
     serializedVersion: 2
@@ -1487,6 +1494,10 @@ PrefabInstance:
       value: === Player ===
       objectReference: {fileID: 0}
     - target: {fileID: 2626419000790568442, guid: 889b4d6ca7f61ab40805c7603e34377c, type: 3}
+      propertyPath: m_Drag
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2626419000790568442, guid: 889b4d6ca7f61ab40805c7603e34377c, type: 3}
       propertyPath: m_AngularDrag
       value: 0.05
       objectReference: {fileID: 0}
@@ -1496,7 +1507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2626419000790568442, guid: 889b4d6ca7f61ab40805c7603e34377c, type: 3}
       propertyPath: m_Interpolate
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2626419000790568442, guid: 889b4d6ca7f61ab40805c7603e34377c, type: 3}
       propertyPath: m_IsKinematic
@@ -1514,6 +1525,10 @@ PrefabInstance:
       propertyPath: _uiController
       value: 
       objectReference: {fileID: 984687490}
+    - target: {fileID: 7370039180368026540, guid: 889b4d6ca7f61ab40805c7603e34377c, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 7370039180368026540, guid: 889b4d6ca7f61ab40805c7603e34377c, type: 3}
       propertyPath: m_ProvidesContacts
       value: 1

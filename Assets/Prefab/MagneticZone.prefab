@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 4707035545884046445}
   - component: {fileID: 7689351312243971384}
   - component: {fileID: 8773503447652294913}
+  - component: {fileID: 2192413694409857229}
   m_Layer: 0
-  m_Name: EnergyZone
+  m_Name: MagneticZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,7 +122,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5416db024b2734387b875735ed05b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredPolarity: 0
-  attractionStrength: 15
-  snapSpeed: 5
-  snapPoint: {fileID: 1133425734946119523}
+  zonePolarity: 0
+  baseForce: 20
+  radius: 5
+  distanceFalloff: 1.5
+--- !u!114 &2192413694409857229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6934696623742197980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6954495da266794d97ca4b305a2fff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positiveColor: {r: 1, g: 0.2, b: 0.2, a: 1}
+  negativeColor: {r: 0.2, g: 0.4, b: 1, a: 1}
+  applyToChildren: 0
+  onlyThisRoot: 1
+  colorProperty: 
+  emissionProperty: 

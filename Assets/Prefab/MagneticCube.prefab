@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9067157846632334312}
   - component: {fileID: 3173803217231733573}
   - component: {fileID: 3394884637820581813}
+  - component: {fileID: 8069263943484396392}
   m_Layer: 0
   m_Name: MagneticCube
   m_TagString: Untagged
@@ -150,3 +151,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   polarity: 0
+  isActiveEnergySource: 1
+  power: 1
+--- !u!114 &8069263943484396392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4618982073474294819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6954495da266794d97ca4b305a2fff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positiveColor: {r: 1, g: 0.2, b: 0.2, a: 1}
+  negativeColor: {r: 0.2, g: 0.4, b: 1, a: 1}
+  applyToChildren: 0
+  useEmission: 1

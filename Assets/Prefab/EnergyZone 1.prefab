@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7894371522072875213}
   - component: {fileID: 8620806701247380320}
   - component: {fileID: 2434782510544823693}
+  - component: {fileID: 8453199782241169366}
   m_Layer: 0
   m_Name: EnergyZone 1
   m_TagString: Untagged
@@ -66,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -126,3 +127,21 @@ MonoBehaviour:
   snapDistance: 1.2
   snapSpeed: 7
   snapPoint: {fileID: 0}
+--- !u!114 &8453199782241169366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7633089948460409677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6954495da266794d97ca4b305a2fff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positiveColor: {r: 1, g: 0.2, b: 0.2, a: 1}
+  negativeColor: {r: 0.2, g: 0.4, b: 1, a: 1}
+  applyToChildren: 0
+  onlyThisRoot: 1
+  colorProperty: 
+  emissionProperty: 

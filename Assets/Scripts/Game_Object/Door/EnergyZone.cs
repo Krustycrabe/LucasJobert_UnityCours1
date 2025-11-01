@@ -13,30 +13,34 @@ public class EnergyZone : MonoBehaviour
     private IMagnetic currentMagnetic;
     private IEnergySource currentEnergySource;
     private Rigidbody rb;
-
     private bool isSnapping = false;
     private bool zoneIsActive = false;
+
     public bool IsZoneActive => zoneIsActive;
 
     private void OnTriggerEnter(Collider other)
     {
+        // ✅ Ignore complètement le Player (il a un PolarityManager)
+        if (other.GetComponentInParent<PolarityManager>() != null)
+        {
+            Debug.Log($"{name} : Player détecté → attraction ignorée.");
+            return;
+        }
+
+        // ✅ Continue uniquement pour des MagneticObjects
+        rb = other.attachedRigidbody;
         currentMagnetic = other.GetComponentInParent<IMagnetic>();
         currentEnergySource = other.GetComponentInParent<IEnergySource>();
-        rb = other.attachedRigidbody;
 
         if (rb == null || currentMagnetic == null)
             return;
 
-        // Si même polarité → on repousse
+        // Même polarité → répulsion
         if (currentMagnetic.GetPolarity() == requiredPolarity)
         {
             Repulse(rb);
             ResetZone();
-            return;
         }
-
-        // Polarité opposée → possible attraction
-        zoneIsActive = false; // On la remet à false tant que le snap n’est pas complet
     }
 
     private void FixedUpdate()
@@ -44,11 +48,10 @@ public class EnergyZone : MonoBehaviour
         if (rb == null || currentMagnetic == null)
             return;
 
-        // Si déjà snappé, on garde la position stable
         if (isSnapping)
             return;
 
-        // Polarité opposée → attraction
+        // Attraction uniquement si polarité opposée
         if (currentMagnetic.GetPolarity() != requiredPolarity)
         {
             Vector3 dir = snapPoint.position - rb.position;
@@ -56,7 +59,6 @@ public class EnergyZone : MonoBehaviour
 
             rb.AddForce(dir.normalized * attractionStrength, ForceMode.Acceleration);
 
-            // Déclenche le snap quand proche
             if (dist < snapDistance)
                 StartSnapping();
         }
@@ -65,69 +67,67 @@ public class EnergyZone : MonoBehaviour
     private void StartSnapping()
     {
         isSnapping = true;
-
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        rb.constraints = RigidbodyConstraints.FreezeAll; // ✅ Gèle la physique, sans kinematic
+        rb.constraints = RigidbodyConstraints.FreezeAll;
 
-        zoneIsActive = true;
-        Debug.Log($"{name} → Zone ACTIVÉE ✅");
+        // ✅ Active la zone uniquement si c’est une vraie source d’énergie
+        if (currentEnergySource != null)
+        {
+            zoneIsActive = true;
+            Debug.Log($"{name} activée (source d'énergie détectée)");
+        }
+        else
+        {
+            Debug.Log($"{name} : objet magnétique snappé mais pas d'énergie (non-alimentant)");
+        }
     }
-
 
     private void Update()
     {
-        if (!isSnapping || rb == null)
-            return;
+        if (isSnapping && rb != null)
+        {
+            rb.transform.position = Vector3.Lerp(
+                rb.transform.position,
+                snapPoint.position,
+                Time.deltaTime * snapSpeed
+            );
 
-        // Interpolation fluide vers le snap point
-        rb.transform.position = Vector3.Lerp(
-            rb.transform.position,
-            snapPoint.position,
-            Time.deltaTime * snapSpeed
-        );
-
-        rb.transform.rotation = Quaternion.Lerp(
-            rb.transform.rotation,
-            snapPoint.rotation,
-            Time.deltaTime * snapSpeed
-        );
+            rb.transform.rotation = Quaternion.Lerp(
+                rb.transform.rotation,
+                snapPoint.rotation,
+                Time.deltaTime * snapSpeed
+            );
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        // Ignore les faux exits liés à la physique
         if (rb == null) return;
 
         float dist = Vector3.Distance(rb.position, snapPoint.position);
-
         if (dist < snapDistance * 1.2f)
-        {
-            Debug.Log($"{name} → FAUSSE SORTIE ignorée");
             return;
-        }
 
-        Debug.Log($"{name} → VRAIE sortie (désactivation)");
         ResetZone();
-    }
-
-    private void Repulse(Rigidbody body)
-    {
-        Vector3 dir = body.position - snapPoint.position;
-        body.AddForce(dir.normalized * attractionStrength * 2f, ForceMode.Impulse);
     }
 
     private void ResetZone()
     {
         if (rb != null)
-        {
             rb.constraints = RigidbodyConstraints.None;
-            rb.isKinematic = false;
-        }
 
         rb = null;
         currentMagnetic = null;
         currentEnergySource = null;
         isSnapping = false;
         zoneIsActive = false;
+    }
+
+    private void Repulse(Rigidbody body)
+    {
+        Vector3 dir = body.position - snapPoint.position;
+        body.AddForce(dir.normalized * attractionStrength * 2f, ForceMode.Impulse);
     }
 }

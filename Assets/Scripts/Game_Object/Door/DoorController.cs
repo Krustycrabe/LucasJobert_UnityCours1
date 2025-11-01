@@ -34,7 +34,6 @@ public class DoorController : MonoBehaviour
             }
         }
 
-        Debug.Log($"Zones actives : {activeZones}/{requiredActiveZones}");
 
         // ✅ Condition explicite : si assez de zones actives → ouvrir
         if (activeZones >= requiredActiveZones && !isOpen)
@@ -54,12 +53,10 @@ public class DoorController : MonoBehaviour
     private void OpenDoor()
     {
         isOpen = true;
-        Debug.Log("✅ PORTE OUVERTE !");
     }
 
     private void CloseDoor()
     {
         isOpen = false;
-        Debug.Log("❌ PORTE FERMÉE !");
     }
 }

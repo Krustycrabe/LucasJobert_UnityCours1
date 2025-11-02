@@ -5,9 +5,10 @@ public class MagneticAnchor : MonoBehaviour, IMagnetic
 {
     [SerializeField] private Polarity polarity = Polarity.Positive;
     [SerializeField] private float fieldStrength = 30f;
-    [SerializeField] private float fieldRange = 10f;
     [SerializeField] private float minDistance = 0.5f;
     [SerializeField] private LayerMask affectedLayers = ~0;
+    [SerializeField] private float fieldRange = 5f;
+    public float GetFieldRange() => fieldRange;
 
     public Polarity GetPolarity() => polarity;
     public bool EmitsField() => true;
@@ -33,7 +34,7 @@ public class MagneticAnchor : MonoBehaviour, IMagnetic
                 continue;
             }
 
-            float sign = (target.GetPolarity() == polarity) ? -1f : 1f;
+            float sign = (target.GetPolarity() == polarity) ? 1f : -1f;
 
             // force plus “arcade” → 1/distance
             Vector3 force = direction.normalized * (fieldStrength / distance) * sign;

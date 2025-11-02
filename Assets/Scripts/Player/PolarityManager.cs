@@ -6,9 +6,10 @@ public class PolarityManager : MonoBehaviour, IMagnetic
 {
     [SerializeField] private Polarity currentPolarity = Polarity.Positive;
     [SerializeField] private float magneticForce = 10f;
-    [SerializeField] private float fieldRange = 8f;
     [SerializeField] private Renderer ballRenderer;
     [SerializeField] private LayerMask affectedLayers = ~0;
+    [SerializeField] private float fieldRange = 5f;
+    public float GetFieldRange() => fieldRange;
 
     private Rigidbody rb;
 
@@ -55,7 +56,7 @@ public class PolarityManager : MonoBehaviour, IMagnetic
             float dist = dir.magnitude;
             if (dist < 0.1f) continue;
 
-            float sign = (targetMag.GetPolarity() == currentPolarity) ? -1f : 1f;
+            float sign = (targetMag.GetPolarity() == currentPolarity) ? 1f : -1f;
             Vector3 force = dir.normalized * (magneticForce / (dist * dist)) * sign;
 
             targetRb.AddForce(force, ForceMode.Force);

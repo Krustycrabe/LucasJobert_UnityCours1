@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class EnergyZone : MonoBehaviour
+public class EnergyZone : MonoBehaviour, IPolarityProvider
 {
     [Header("Magnetic Settings")]
     [SerializeField] private Polarity requiredPolarity = Polarity.Positive;
@@ -9,6 +9,9 @@ public class EnergyZone : MonoBehaviour
     [SerializeField] private float snapDistance = 1.2f;
     [SerializeField] private float snapSpeed = 7f;
     [SerializeField] private Transform snapPoint;
+    [SerializeField] private float fieldRange = 5f;
+    public float GetFieldRange() => fieldRange;
+    public Polarity GetPolarity() => requiredPolarity;
 
     private IMagnetic currentMagnetic;
     private IEnergySource currentEnergySource;

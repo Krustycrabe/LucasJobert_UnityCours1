@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class MagneticZone : MonoBehaviour
+public class MagneticZone : MonoBehaviour, IPolarityProvider
 {
     [Header("Magnetic Zone Settings")]
     [SerializeField] private Polarity zonePolarity = Polarity.Positive;
     [SerializeField] private float baseForce = 20f;
-    [SerializeField] private float radius = 5f;
     [SerializeField] private float distanceFalloff = 1.5f; // 1 = doux, 2 = très fort au centre
+    [SerializeField] private float fieldRange = 5f;
+    public float GetFieldRange() => fieldRange;
+    public Polarity GetPolarity() => zonePolarity;
 
     private Collider col;
 
@@ -28,7 +30,7 @@ public class MagneticZone : MonoBehaviour
         // Direction centre → objet
         Vector3 dir = other.transform.position - transform.position;
         float dist = dir.magnitude;
-        if (dist > radius) return;
+        if (dist > fieldRange) return;
 
         // Falloff (plus proche = plus fort)
         float falloff = 1f / Mathf.Pow(dist + 0.1f, distanceFalloff);
@@ -53,6 +55,6 @@ public class MagneticZone : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = (zonePolarity == Polarity.Positive) ? Color.red : Color.blue;
-        Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.DrawWireSphere(transform.position, fieldRange);
     }
 }

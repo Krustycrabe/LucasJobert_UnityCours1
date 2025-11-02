@@ -6,9 +6,8 @@ public enum Polarity
     Negative
 }
 
-public interface IMagnetic
+public interface IMagnetic : IPolarityProvider
 {
-    Polarity GetPolarity();
     bool EmitsField(); // True si l’objet émet un champ magnétique
     void ApplyMagneticForce(IMagnetic other);
 }

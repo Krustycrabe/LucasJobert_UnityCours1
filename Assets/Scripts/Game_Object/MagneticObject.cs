@@ -9,6 +9,8 @@ public class MagneticObject : MonoBehaviour, IMagnetic, IEnergySource
     [Header("Energy Settings")]
     [SerializeField] private bool isActiveEnergySource = true;
     [SerializeField] private float power = 1f;
+    [SerializeField] private float fieldRange = 5f;
+    public float GetFieldRange() => fieldRange;
 
     public Polarity GetPolarity() => polarity;
 

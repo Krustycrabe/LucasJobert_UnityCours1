@@ -50,7 +50,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 804918415802952079}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -121,4 +121,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d70cb4d940f24064291641f5ab55daa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultBehaviour: 0
   respawnPoint: {fileID: 3850025767589249050}

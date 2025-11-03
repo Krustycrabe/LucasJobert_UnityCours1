@@ -1,33 +1,120 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class EndLevelUI : MonoBehaviour
 {
+    [Header("UI")]
+    [SerializeField] private GameObject panel;
+    [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text starText;
+
+    [Header("Data")]
+    [SerializeField] private ScoreDatas scoreManager;
+
+    // optionnel : si tu veux masquer/afficher le curseur
+    [SerializeField] private bool manageCursor = true;
+
+    private bool isOpen = false;
+    private PolarityManager cachedPlayer;
+
+    private void Awake()
+    {
+        if (panel) panel.SetActive(false);
+        cachedPlayer = GetComponent<PolarityManager>();
+    }
+
+    private void OnEnable()
+    {
+        GameEventManager.OnLevelCompleted += ShowMenu;
+    }
+
+    private void OnDisable()
+    {
+        GameEventManager.OnLevelCompleted -= ShowMenu;
+        // sécurité : si jamais on disable alors que c’est ouvert, on remet le temps
+        if (isOpen) ResumeTime();
+    }
+
+    // ---------- Affichage du menu de fin ----------
+    private void ShowMenu()
+    {
+        if (isOpen) return;
+        isOpen = true;
+
+        if (panel) panel.SetActive(true);
+
+        // freeze gameplay
+        PauseTime();
+        DisablePlayerControl();
+
+        // update UI
+        if (scoreText) scoreText.text = $"SCORE FINAL : {scoreManager.CurrentScore}";
+        if (starText) starText.text = $"Stars : {scoreManager.StarCount}";
+    }
+
+    // ---------- Boutons ----------
     public void RestartLevel()
     {
-        Debug.Log("🔁 Redémarrage du niveau...");
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        panel?.SetActive(false);
+        scoreManager.ResetScore();
+
+        if (PlayerRespawnManager.Instance != null)
+            PlayerRespawnManager.Instance.KillPlayerReload(); // ← reload scène
+        else
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
 
     public void NextLevel()
     {
-        Debug.Log("➡️ Niveau suivant...");
-        Time.timeScale = 1f;
+        ResumeTime();
 
-        int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        // si tu veux remettre juste le score de niveau (et pas le total), crée une méthode dédiée.
+        scoreManager.ResetScore();
 
-        // Vérifie qu’un niveau suivant existe
-        if (nextIndex < SceneManager.sceneCountInBuildSettings)
-            SceneManager.LoadScene(nextIndex);
+        int next = SceneManager.GetActiveScene().buildIndex + 1;
+        if (next < SceneManager.sceneCountInBuildSettings)
+            SceneManager.LoadScene(next);
         else
-            Debug.Log("🏁 Dernier niveau atteint !");
+            Debug.Log("Dernier niveau atteint !");
     }
 
-    public void QuitToMenu()
+    public void QuitGame()
     {
-        Debug.Log("⬅️ Retour au menu principal...");
+        ResumeTime();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    // ---------- Helpers ----------
+    private void PauseTime()
+    {
+        Time.timeScale = 0f;
+        if (manageCursor)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+
+    private void ResumeTime()
+    {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu"); // Optionnel, si tu veux un menu plus tard
+        if (manageCursor)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
+    private void DisablePlayerControl()
+    {
+        if (!cachedPlayer) cachedPlayer = GetComponent<PolarityManager>();
+        if (cachedPlayer) cachedPlayer.enabled = false; // simple et efficace
     }
 }

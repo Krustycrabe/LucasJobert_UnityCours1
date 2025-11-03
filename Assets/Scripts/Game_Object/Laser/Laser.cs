@@ -203,7 +203,6 @@ public class LaserHazard : MonoBehaviour
 
         if (player.GetPolarity() == laserPolarity)
         {
-            Debug.Log($"💀 Laser ({laserPolarity}) tue joueur ({player.GetPolarity()}) via {name}");
             if (PlayerRespawnManager.Instance != null)
                 PlayerRespawnManager.Instance.KillPlayer();
             else

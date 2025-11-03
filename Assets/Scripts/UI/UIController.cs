@@ -1,22 +1,36 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIController : MonoBehaviour
 {
-    [SerializeField] private TMP_Text _scoreText;
+    [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text starText;
+    [SerializeField] private ScoreDatas scoreDatas;
 
-    private void Start()
+    private void OnEnable()
     {
-        UpdateScore(0);
+        GameEventManager.OnScoreChanged += UpdateScore;
+        GameEventManager.OnStarCollected += UpdateStars;
+        UpdateScore(scoreDatas.CurrentScore);
+        UpdateStars(scoreDatas.StarCount);
     }
-    
-      
-    
 
-    public void UpdateScore(int newScore)
+    private void OnDisable()
     {
-        _scoreText.text = "Score :" + newScore.ToString();
+        GameEventManager.OnScoreChanged -= UpdateScore;
+        GameEventManager.OnStarCollected -= UpdateStars;
     }
-      
 
+    private void UpdateScore(int value)
+    {
+        if (scoreText != null)
+            scoreText.text = $"SCORE : {value}";
+    }
+
+    private void UpdateStars(int count)
+    {
+        if (starText != null)
+            starText.text = $"STARS : {count}";
+    }
 }

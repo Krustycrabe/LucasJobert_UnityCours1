@@ -7,15 +7,9 @@ public class EndLevelTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (levelEnded) return;
-
-        // Vérifie si l'objet a un PolarityManager (ton player)
-        var player = other.GetComponentInParent<PolarityManager>();
-        if (player != null)
+        if (other.GetComponentInParent<PolarityManager>() != null)
         {
-            levelEnded = true;;
-            endLevelUI.SetActive(true);
-            Time.timeScale = 0f;
+            GameEventManager.RaiseLevelCompleted();
         }
     }
 }

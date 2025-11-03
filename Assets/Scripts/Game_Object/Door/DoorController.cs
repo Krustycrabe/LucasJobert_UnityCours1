@@ -30,7 +30,6 @@ public class DoorController : MonoBehaviour
             if (zone != null && zone.IsZoneActive)
             {
                 activeZones++;
-                Debug.Log($"Zone active détectée : {zone.name}");
             }
         }
 

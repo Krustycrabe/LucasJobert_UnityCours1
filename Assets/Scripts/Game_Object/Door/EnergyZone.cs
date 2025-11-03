@@ -26,7 +26,6 @@ public class EnergyZone : MonoBehaviour, IPolarityProvider
         // ✅ Ignore complètement le Player (il a un PolarityManager)
         if (other.GetComponentInParent<PolarityManager>() != null)
         {
-            Debug.Log($"{name} : Player détecté → attraction ignorée.");
             return;
         }
 
@@ -78,12 +77,8 @@ public class EnergyZone : MonoBehaviour, IPolarityProvider
         if (currentEnergySource != null)
         {
             zoneIsActive = true;
-            Debug.Log($"{name} activée (source d'énergie détectée)");
         }
-        else
-        {
-            Debug.Log($"{name} : objet magnétique snappé mais pas d'énergie (non-alimentant)");
-        }
+
     }
 
     private void Update()

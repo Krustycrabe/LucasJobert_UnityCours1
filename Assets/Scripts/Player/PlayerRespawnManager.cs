@@ -13,6 +13,9 @@ public class PlayerRespawnManager : MonoBehaviour
     [Header("Respawn")]
     [SerializeField] private Transform respawnPoint;
 
+    [Header("Data")]
+    [SerializeField] private ScoreDatas scoreManager;
+
     private PolarityManager player;
     private Rigidbody playerRb;
 
@@ -51,6 +54,7 @@ public class PlayerRespawnManager : MonoBehaviour
     /// </summary>
     public void KillPlayer()
     {
+        scoreManager.ResetScore();
         if (defaultBehaviour == DeathBehaviour.ReloadScene)
             KillPlayerReload();
         else

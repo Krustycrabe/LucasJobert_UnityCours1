@@ -34,7 +34,7 @@ public class DoorController : MonoBehaviour
         }
 
 
-        // ✅ Condition explicite : si assez de zones actives → ouvrir
+        // Condition explicite : si assez de zones actives → ouvrir
         if (activeZones >= requiredActiveZones && !isOpen)
         {
             OpenDoor();

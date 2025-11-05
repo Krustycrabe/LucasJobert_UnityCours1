@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Unity.VisualScripting;
 
 public class EndLevelUI : MonoBehaviour
 {
@@ -71,8 +72,8 @@ public class EndLevelUI : MonoBehaviour
     {
         ResumeTime();
 
-        // si tu veux remettre juste le score de niveau (et pas le total), crée une méthode dédiée.
-        scoreManager.ResetScore();
+        if (SceneManager.GetActiveScene().buildIndex != 0)
+            scoreManager.ResetScore();
 
         int next = SceneManager.GetActiveScene().buildIndex + 1;
         if (next < SceneManager.sceneCountInBuildSettings)

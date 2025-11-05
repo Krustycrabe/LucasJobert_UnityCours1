@@ -63,7 +63,7 @@ public class MagneticFieldAutoVisualizer : MonoBehaviour
         if (propBlock == null)
             propBlock = new MaterialPropertyBlock();
 
-        // 🎨 Couleur selon polarité
+        // Couleur selon polarité
         Color targetColor = polarityProvider != null && polarityProvider.GetPolarity() == Polarity.Positive
             ? positiveColor
             : negativeColor;
@@ -71,7 +71,7 @@ public class MagneticFieldAutoVisualizer : MonoBehaviour
         propBlock.SetColor("_BaseColor", targetColor);
         fieldRenderer.SetPropertyBlock(propBlock);
 
-        // 🧲 Taille du champ basée sur le fieldRange réel
+        // Taille du champ basée sur le fieldRange réel
         float range = magneticSource != null ? magneticSource.GetFieldRange() : 3f;
         float scale = range * 2f * visualScaleMultiplier;
 
@@ -79,10 +79,10 @@ public class MagneticFieldAutoVisualizer : MonoBehaviour
             ? new Vector3(scale, 1f, scale)
             : new Vector3(scale, scale, scale);
 
-        // 📍 Position
+        // Position
         fieldVisual.transform.localPosition = Vector3.zero;
 
-        // 🔄 Si c’est un disque, on le garde bien à plat
+        // Si c’est un disque, on le garde bien à plat
         if (useFlatDisk)
         {
             fieldVisual.transform.rotation = Quaternion.identity;

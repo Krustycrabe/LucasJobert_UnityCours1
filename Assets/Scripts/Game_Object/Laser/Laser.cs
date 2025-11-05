@@ -51,7 +51,7 @@ public class LaserHazard : MonoBehaviour
         if (lineRenderer == null || capsule == null)
             return;
 
-        // 🧱 Empêche toute exécution sur un prefab (hors scène)
+        // Empêche toute exécution sur un prefab (hors scène)
         if (!Application.isPlaying && !gameObject.scene.IsValid())
             return;
 
@@ -115,7 +115,7 @@ public class LaserHazard : MonoBehaviour
         lineRenderer.startWidth = beamWidth;
         lineRenderer.endWidth = beamWidth;
 
-        // 🔧 Crée un matériau de base uniquement en mode Play
+        // Crée un matériau de base uniquement en mode Play
         if (Application.isPlaying)
         {
             if (lineRenderer.material == null)
@@ -126,7 +126,7 @@ public class LaserHazard : MonoBehaviour
         }
         else
         {
-            // 🧱 En mode Éditeur : utiliser sharedMaterial (ne crée pas d'instance)
+            // En mode Éditeur : utiliser sharedMaterial (ne crée pas d'instance)
             if (lineRenderer.sharedMaterial == null)
             {
                 var mat = new Material(Shader.Find("Unlit/Color"));
@@ -154,7 +154,7 @@ public class LaserHazard : MonoBehaviour
         if (lineRenderer == null)
             return;
 
-        // 🧱 Bloque la logique si le prefab n’est pas instancié dans une scène
+        // Bloque la logique si le prefab n’est pas instancié dans une scène
         if (!Application.isPlaying && !gameObject.scene.IsValid())
             return;
 
@@ -169,7 +169,7 @@ public class LaserHazard : MonoBehaviour
         lineRenderer.startColor = pulsedColor;
         lineRenderer.endColor = pulsedColor;
 
-        // ✅ Matériau sûr selon le mode
+        // Matériau sûr selon le mode
         if (Application.isPlaying)
         {
             if (lineRenderer.material != null)
